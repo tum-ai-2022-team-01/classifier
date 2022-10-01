@@ -141,13 +141,3 @@ def validation(model, test_loader, epoch):
             fin_outputs.extend(torch.sigmoid(
                 outputs).cpu().detach().numpy().tolist())
     return fin_outputs, fin_targets
-
-
-if __name__ == '__main__':
-    risk_classifier = BERTClassifier(NUM_RISK_CLASSES)
-    high_risk_case_classifier = BERTClassifier(NUM_HIGH_RISK_CASES)
-    prohibited_case_classifier = BERTClassifier(NUM_PROHIBITED_CASES)
-    risk_classifier.to(device)
-    high_risk_case_classifier.to(device)
-    prohibited_case_classifier.to(device)
-
