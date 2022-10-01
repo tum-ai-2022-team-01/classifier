@@ -3,8 +3,9 @@ from flask import request
 
 def classifier(text):
   return {
-    'risk': 'prohibited',
-    'explanation': 'A AI-controlled world domination system (Terminator) is probably a bad idea...'
+    'risk': 'high',
+    'title': 'Prohibited AI use',
+    'description': 'A AI-controlled world domination system (Terminator) is probably a bad idea...'
   }
 
 @app.route('/')
