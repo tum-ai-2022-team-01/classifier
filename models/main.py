@@ -53,19 +53,24 @@ def classify_prohibited(text):
 def main(text):
   # TODO: include Annex III cases and Prohibited cases
   risk_class = classify_user_input(text)
-  explanation = ""
+  risk = ""
+  description = ""
   if risk_class == 'Low-risk':
-    explanation = """TODO: Some generic answer"""
+    risk = 'low'
+    description = """TODO: Some generic answer"""
   elif risk_class == 'High-risk':
+    risk = 'medium'
     annex_num = classify_high_risk(text)
-    explanation = annex[annex_num]
+    description = annex[annex_num]
   else:
+    risk = 'high'
     explanation_num = classify_prohibited(text)
-    explanation = prohibited_cases[explanation_num]
+    description = prohibited_cases[explanation_num]
 
   response = {
-      'risk_category': risk_class,
-      'explanation': explanation
+      'risk': risk,
+      'title': "{} AI use".format(risk_class),
+      'description': description
   }
 
   return response
