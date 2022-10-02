@@ -11,7 +11,7 @@ from torch import cuda
 torch.cuda.empty_cache()
 device = 'cuda' if cuda.is_available() else 'cpu'
 
-from Classifiers import BERTClassifier
+from models.Classifiers import BERTClassifier
 from resources import low_risk_generic_answer, high_risk_dict, high_risk_assesment_and_tools, prohibited_dict
 
 NUM_RISK_CLASSES = 3
