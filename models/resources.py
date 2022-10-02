@@ -1,20 +1,21 @@
 low_risk_generic_answer = """
 The described AI use case is likely to be classified as low-risk according to the EU AI Act. However, please seek further legal advice.
 
-The list of aspects that make a system high-risk
+<h5>The list of aspects that make a system high-risk</h5>
 
-1. Biometric identification & categorisation of natural persons
-2. Management and operation of critical infrastructure
-3. Education and vocational training
-4. Employment, workers management and access to self-
-employment:
-5. Access to and enjoyment of essential private services
-and public services and benefits
-6. Law enforcement
-7. Migration, asylum and border control management
-8. Administration of justice and democratic processes
-
-9. AI as a safety component of regulated products such as but not limited to: Machinery Watercraft, Equipment for explosive atmospheres, Radio equipment, In vitro diagnostic medical devices, Cableway installations, Toys, Lifts, Personal protection equipment, Pressure equipment, Appliances burning fuels, Medical devices """
+<ol>
+<li>Biometric identification & categorisation of natural persons</li>
+<li>Management and operation of critical infrastructure</li>
+<li>Education and vocational training</li>
+<li>Employment, workers management and access to self-
+employment</li>
+<li>Access to and enjoyment of essential private services
+and public services and benefits</li>
+<li>Law enforcement</li>
+<li>Migration, asylum and border control management</li>
+<li>Administration of justice and democratic processes</li>
+<li>AI as a safety component of regulated products such as but not limited to: Machinery Watercraft, Equipment for explosive atmospheres, Radio equipment, In vitro diagnostic medical devices, Cableway installations, Toys, Lifts, Personal protection equipment, Pressure equipment, Appliances burning fuels, Medical devices</li></ol>
+"""
 
 prohibited_dict = {
     1: """
