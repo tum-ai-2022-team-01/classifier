@@ -11,7 +11,8 @@ from torch import cuda
 torch.cuda.empty_cache()
 device = 'cuda' if cuda.is_available() else 'cpu'
 
-from classifier.models.Classifiers import BERTClassifier
+from Classifiers import BERTClassifier
+from resources import low_risk_generic_answer, high_risk_dict, high_risk_assesment_and_tools, prohibited_dict
 
 NUM_RISK_CLASSES = 3
 NUM_PROHIBITED_CASES = 4
@@ -43,29 +44,45 @@ def classify_user_input(text):
 
 
 def classify_high_risk(text):
-  pass
+  tokens = tokenizer.encode_plus(text, return_tensors="pt")
+  logits = high_risk_case_classifier(**tokens)
+  prediction = np.argmax(logits)
+  return prediction
 
 
 def classify_prohibited(text):
-  pass
+  tokens = tokenizer.encode_plus(text, return_tensors="pt")
+  logits = prohibited_case_classifier(**tokens)
+  prediction = np.argmax(logits)
+  return prediction
 
 
 def main(text):
-  # TODO: include Annex III cases and Prohibited cases
   risk_class = classify_user_input(text)
   risk = ""
   description = ""
   if risk_class == 'Low-risk':
     risk = 'low'
-    description = """TODO: Some generic answer"""
+    description = low_risk_generic_answer
   elif risk_class == 'High-risk':
     risk = 'medium'
     annex_num = classify_high_risk(text)
-    description = annex[annex_num]
+    description = """
+    The described AI use case might be classified as high-risk under the EU AI Act. Please seek further legal advice.
+
+    Why is it classified as high-risk?
+
+    {}
+    """.format(high_risk_dict[annex_num])
   else:
     risk = 'high'
     explanation_num = classify_prohibited(text)
-    description = prohibited_cases[explanation_num]
+    description = """
+    he described AI use case is likely to be prohibited in the European Union. Please seek further legal advice.
+
+    Why is the use case prohibited?
+    The use case involves one or more of these factors:
+    """.format(prohibited_dict[explanation_num])
 
   response = {
       'risk': risk,
