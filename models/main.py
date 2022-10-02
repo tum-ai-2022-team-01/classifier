@@ -75,17 +75,16 @@ def classifier(text):
 
     Why is it classified as high-risk?
 
-    {}
-    """.format(high_risk_dict[annex_num])
+    """ + high_risk_dict[annex_num]
   else:
     risk = 'high'
     explanation_num = classify_prohibited(text)
     description = """
-    he described AI use case is likely to be prohibited in the European Union. Please seek further legal advice.
+    The described AI use case is likely to be prohibited in the European Union. Please seek further legal advice.
 
     Why is the use case prohibited?
     The use case involves one or more of these factors:
-    """.format(prohibited_dict[explanation_num])
+    """ + prohibited_dict[explanation_num]
 
   response = {
       'risk': risk,
