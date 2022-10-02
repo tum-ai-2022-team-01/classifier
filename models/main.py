@@ -11,15 +11,15 @@ from torch import cuda
 torch.cuda.empty_cache()
 device = 'cuda' if cuda.is_available() else 'cpu'
 
-from models.Classifiers import BERTClassifier
-from resources import low_risk_generic_answer, high_risk_dict, high_risk_assesment_and_tools, prohibited_dict
+from models.classifiers import BERTClassifier
+from models.resources import low_risk_generic_answer, high_risk_dict, prohibited_dict
 
 NUM_RISK_CLASSES = 3
 NUM_PROHIBITED_CASES = 4
-NUM_HIGH_RISK_CASES = 4
-RISK_CLASSIFIER_CHECKPOINT = 'checkpoints/risk_classifier.pt'
-HIGH_RISK_CASE_CLASSIFIER_CHECKPOINT = 'checkpoints/high_risk_case_classifier.pt'
-PROHIBITED_CASE_CLASSIFIER_CHECKPOINT = 'checkpoints/prohibited_case_classifier.pt'
+NUM_HIGH_RISK_CASES = 5
+RISK_CLASSIFIER_CHECKPOINT = 'models/checkpoints/risk_classifier.pt'
+HIGH_RISK_CASE_CLASSIFIER_CHECKPOINT = 'models/checkpoints/high_risk_case_classifier.pt'
+PROHIBITED_CASE_CLASSIFIER_CHECKPOINT = 'models/checkpoints/prohibited_case_classifier.pt'
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
 # Instantiate all models
@@ -31,33 +31,36 @@ prohibited_case_classifier = BERTClassifier(NUM_PROHIBITED_CASES)
 risk_classifier.load_state_dict(torch.load(RISK_CLASSIFIER_CHECKPOINT))
 high_risk_case_classifier.load_state_dict(
     torch.load(HIGH_RISK_CASE_CLASSIFIER_CHECKPOINT))
-prohibited_case_classifier.load_state_dict(
-    torch.load(PROHIBITED_CASE_CLASSIFIER_CHECKPOINT))
+
+# Prohibited case classifier not properly trained yet!
+#  
+# prohibited_case_classifier.load_state_dict(
+#     torch.load(PROHIBITED_CASE_CLASSIFIER_CHECKPOINT))
 
 
 def classify_user_input(text):
   classes = ['High-risk', 'Low-risk', 'Prohibited']
   tokens = tokenizer.encode_plus(text, return_tensors="pt")
-  logits = risk_classifier(**tokens)
+  logits = risk_classifier(**tokens).detach().numpy()
   prediction = classes[np.argmax(logits)]
   return prediction
 
 
 def classify_high_risk(text):
   tokens = tokenizer.encode_plus(text, return_tensors="pt")
-  logits = high_risk_case_classifier(**tokens)
+  logits = high_risk_case_classifier(**tokens).detach().numpy()
   prediction = np.argmax(logits)
-  return prediction
+  return prediction + 1 # start counting from 1
 
 
 def classify_prohibited(text):
   tokens = tokenizer.encode_plus(text, return_tensors="pt")
-  logits = prohibited_case_classifier(**tokens)
+  logits = prohibited_case_classifier(**tokens).detach().numpy()
   prediction = np.argmax(logits)
-  return prediction
+  return prediction + 1  # start counting from 1
 
 
-def main(text):
+def classifier(text):
   risk_class = classify_user_input(text)
   risk = ""
   description = ""
